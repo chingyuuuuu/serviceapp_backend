@@ -38,3 +38,13 @@ class User(db.Model):
 
         elapsed_time = (datetime.utcnow() - self.reset_token_created_at).total_seconds()
         return elapsed_time < expiration_seconds
+
+class Product(db.Model):
+   __tablename__ = 'products'
+   user_id=db.Column(db.Integer,primary_key=True)
+   name = db.Column(db.String(45),nullable=False)
+   type = db.Column(db.String(45),nullable=False)
+   price =db.Column(db.Float ,nullable=False)
+   cost= db.Column(db.Float ,nullable=True)
+   quantity=db.Column(db.Integer,nullable=True)
+   image= db.Column(db.String(200))

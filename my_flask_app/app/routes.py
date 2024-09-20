@@ -5,6 +5,7 @@ from .models import User
 from sqlalchemy.sql import text
 from flask_mail import Message
 from werkzeug.security import generate_password_hash
+from flask import session
 
 main_routes = Blueprint('main_routes', __name__)
 
@@ -35,6 +36,7 @@ def login():
         if not user:
             return jsonify({"message":"Invalid username or password"})
         if check_password_hash(user.password,password):
+            session['user_id']=user.user_id
             return jsonify({"message":"Login successful","user_id":user.user_id})
         else:
             return jsonify({"message":"Invalid username or password"})
@@ -173,6 +175,42 @@ def update_password():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({'message': 'Server error', 'error': str(e)}), 500
+
+@main_routes.route('/uploadproducts', methods=['POST'])
+def save_product():
+    from .models import Product
+    from . import db
+    import os
+    from flask import session
+
+    if 'image' not in request.files:
+        image_path = None
+    else:
+        image_file = request.files['image']
+        if not os.path.exists('uploads'):
+            os.makedirs('uploads')
+        image_path = os.path.join('uploads', image_file.filename)
+        image_file.save(image_path)
+
+    data = request.form  # 请求数据
+    user_id = session.get('user_id')
+    if user_id is None:
+        print("User not logged in, session:", session)
+        return jsonify({"error": "User not logged in"}), 401
+
+    new_product = Product(
+        name=data['name'],
+        type=data['type'],
+        price=data['price'],
+        cost=data['cost'],
+        quantity=data['quantity'],
+        image=image_path,  # 如果没有图片，image_path 会是 None
+        user_id=user_id
+    )
+
+    db.session.add(new_product)
+    db.session.commit()
+    return jsonify({"message": "Product saved successfully!"})
 
 @main_routes.route('/test_db', methods=['GET'])
 def test_db():
