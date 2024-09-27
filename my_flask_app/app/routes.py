@@ -1,5 +1,5 @@
 import string,random
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,redirect, url_for
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 from .models import User
 from sqlalchemy.sql import text
@@ -28,6 +28,7 @@ def login():
     account = data.get('account')
     password = data.get('password')
 
+
     if not account or not password:
         return jsonify({"message": "Account and password are required"}), 400
 
@@ -36,8 +37,8 @@ def login():
         if not user:
             return jsonify({"message":"Invalid username or password"})
         if check_password_hash(user.password,password):
-            session['user_id']=user.user_id
-            return jsonify({"message":"Login successful","user_id":user.user_id})
+            # 從後端傳送user_id到前端
+            return jsonify({"message":"Login successful","user_id":str(user.user_id)})
         else:
             return jsonify({"message":"Invalid username or password"})
 
@@ -176,12 +177,11 @@ def update_password():
         print(f"Error: {e}")
         return jsonify({'message': 'Server error', 'error': str(e)}), 500
 
-@main_routes.route('/uploadproducts', methods=['POST'])
+@main_routes.route('/uploadproducts', methods=['POST'],endpoint='uploadproducts')
 def save_product():
     from .models import Product
     from . import db
     import os
-    from flask import session
 
     if 'image' not in request.files:
         image_path = None
@@ -193,10 +193,7 @@ def save_product():
         image_file.save(image_path)
 
     data = request.form  # 请求数据
-    user_id = session.get('user_id')
-    if user_id is None:
-        print("User not logged in, session:", session)
-        return jsonify({"error": "User not logged in"}), 401
+    user_id = int(data.get('user_id'))
 
     new_product = Product(
         name=data['name'],
@@ -204,14 +201,16 @@ def save_product():
         price=data['price'],
         cost=data['cost'],
         quantity=data['quantity'],
-        image=image_path,  # 如果没有图片，image_path 会是 None
-        user_id=user_id
+        user_id=user_id,
+        image=image_path  # 如果没有图片，image_path 会是 None
     )
 
-    db.session.add(new_product)
-    db.session.commit()
-    return jsonify({"message": "Product saved successfully!"})
-
+    try:
+        db.session.commit()
+        return jsonify({"message": "Product saved successfully!"}), 200
+    except Exception as e:
+        db.session.rollback()  # 如果提交失败，回滚会话
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
 @main_routes.route('/test_db', methods=['GET'])
 def test_db():
     from . import db
