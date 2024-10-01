@@ -1,11 +1,10 @@
-import string,random
-from flask import Blueprint, request, jsonify,redirect, url_for
+import string ,random
+from flask import Blueprint, request, jsonify,send_from_directory
 from sqlalchemy.exc import SQLAlchemyError, OperationalError
 from .models import User
 from sqlalchemy.sql import text
 from flask_mail import Message
 from werkzeug.security import generate_password_hash
-from flask import session
 
 main_routes = Blueprint('main_routes', __name__)
 
@@ -183,14 +182,19 @@ def save_product():
     from . import db
     import os
 
+    uploads_folder = 'uploads'
+    #儲存圖片的url
     if 'image' not in request.files:
         image_path = None
     else:
         image_file = request.files['image']
-        if not os.path.exists('uploads'):
-            os.makedirs('uploads')
-        image_path = os.path.join('uploads', image_file.filename)
+        if not os.path.exists(uploads_folder):
+            os.makedirs(uploads_folder)
+        image_path = os.path.join(uploads_folder, image_file.filename)
         image_file.save(image_path)
+        #生成圖片url
+        image_url = f"http://127.0.0.1:5000/{image_path.replace(os.sep, '/')}"
+        print(f"File saved to: {image_path}")
 
     data = request.form  # 请求数据
     user_id = int(data.get('user_id'))
@@ -202,15 +206,59 @@ def save_product():
         cost=data['cost'],
         quantity=data['quantity'],
         user_id=user_id,
-        image=image_path  # 如果没有图片，image_path 会是 None
+        image=image_url  # 如果没有image，image_path 是 None
     )
 
     try:
+        db.session.add(new_product)
         db.session.commit()
-        return jsonify({"message": "Product saved successfully!"}), 200
+        return jsonify({
+            "message": "Product saved successfully!",
+            "image_url":image_url
+        }), 200
     except Exception as e:
         db.session.rollback()  # 如果提交失败，回滚会话
+        print(f"Error occurred: {e}")  # 打印具體的錯誤信息
         return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+
+@main_routes.route('/getProducts',methods=['GET'])
+def get_products():
+    from .models import Product
+    try:
+            user_id =request.args.get('user_id')
+            if not user_id:
+                return jsonify({"message":"User ID missing"}),400
+
+
+            #將查詢結果轉換為json
+            products = Product.query.filter_by(user_id=user_id).all()
+            products_list=[]
+            #遍歷每個商品並加入倒product_list
+            for product in products:
+                image_url = f"http://127.0.0.1:5000/{product.image}" if '/uploads/' not in product.image else product.image
+                products_list.append({
+                                'name': product.name,
+                                'type': product.type,
+                                'price': product.price,
+                                'cost': product.cost,
+                                'quantity': product.quantity,
+                                'image':  image_url,
+                            })
+
+            return jsonify(products_list), 200
+    except Exception as e:
+        print(f"Error occurred while fetching products: {e}")  # 打印具體的錯誤信息
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+
+
+@main_routes.route('/uploads/<filename>', methods=['GET'])
+def uploaded_file(filename):
+    return send_from_directory('uploads', filename)
+
+
+
 @main_routes.route('/test_db', methods=['GET'])
 def test_db():
     from . import db
