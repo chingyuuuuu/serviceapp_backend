@@ -72,7 +72,7 @@ def register():
         db.session.add(new_user)#加入database
         db.session.commit()#儲存到database
 
-        return jsonify({"message": "User registered successfully", "user_id": new_user.user_id})
+        return jsonify({"message": "User registered successfully", "user_id": new_user.user_id}),200
 
     except SQLAlchemyError as e:#用於捕獲數據庫異常
         db.session.rollback()  # 撤销所有更改
@@ -214,7 +214,7 @@ def save_product():
         db.session.commit()
         return jsonify({
             "message": "Product saved successfully!",
-            "image_url":image_url
+            "image_url": image_url,
         }), 200
     except Exception as e:
         db.session.rollback()  # 如果提交失败，回滚会话
@@ -238,6 +238,7 @@ def get_products():
             for product in products:
                 image_url = f"http://127.0.0.1:5000/{product.image}" if '/uploads/' not in product.image else product.image
                 products_list.append({
+                                'product_id':product.product_id,
                                 'name': product.name,
                                 'type': product.type,
                                 'price': product.price,
@@ -252,11 +253,107 @@ def get_products():
         return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
 
+@main_routes.route('/getproducts/<int:productId>',methods=['GET'])
+def get_one_product(productId):
+    from .models import Product
+    try:
+        #根據productId去資料庫找商品
+        product = Product.query.get(productId)
+        if product is None:
+            return jsonify({"message":"Product not found"}),
+        return jsonify({
+             'product_id': product.product_id,
+              'name':product.name,
+             'type': product.type,
+              'price': product.price,
+              'cost': product.cost,
+              'quantity': product.quantity,
+        }),200
+    except SQLAlchemyError as e:
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+
+
+@main_routes.route('/update_product/<int:productId>',methods=['PUT'])
+def update_product(productId):#接收ProudctId
+    from .models import Product
+    from . import db
+    data = request.get_json()#從前端獲取數據
+
+    if not data:
+        return jsonify({"message":"No data provided"}),400
+    try:
+        #用product_id查找產品
+        product = Product.query.get(productId)
+        if not product:
+            #不存在,404
+            return jsonify({"message":"Product not found"}),404
+
+        #初始化變數-如果前端提供某個欄位的值就使用，如果沒有就用現有的資訊去初始化
+        name = data.get('name') if 'name' in data else product.name
+        type = data.get('type') if 'type' in data else product.type
+        price = data.get('price') if 'price' in data else product.price
+        cost = data.get('cost') if 'cost' in data else product.cost
+        quantity = data.get('quantity') if 'quantity' in data else product.quantity
+
+        is_modified =False
+
+        # 確保只有在值發生變化時才會更新
+        if name != product.name:
+            product.name = name
+            is_modified = True
+        if type != product.type:
+            product.type = type
+            is_modified = True
+        if price != product.price:
+            product.price = price
+            is_modified = True
+        if cost != product.cost:
+            product.cost = cost
+            is_modified = True
+        if quantity != product.quantity:
+            product.quantity = quantity
+            is_modified = True
+
+        if not is_modified:
+            return jsonify({"message": "No changes were made to the product."}), 200
+
+        db.session.commit()
+
+        return jsonify({
+                "message": "Product updated successfully",
+                'product_id': product.product_id,  # 返回产品ID
+                'name': product.name,
+                'type': product.type,
+                'price': product.price,
+                'cost': product.cost,
+                'quantity': product.quantity
+        }), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"message":"An error occurred","error":str(e)}),500
+
+@main_routes.route('/delete_product/<int:productId>',methods=['DELETE'])
+def delete_prodcut(productId):
+    from .models import Product
+    from .import db
+    try:
+        product =Product.query.get(productId)
+        if not product:
+            return jsonify({"message":"Product not found "}),404
+        db.session.delete(product)
+        db.session.commit()
+
+        return jsonify({"message":"Product deleted successful!"}),200
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"message":"An error occurred","error":str(e)}),500
+
 
 @main_routes.route('/uploads/<filename>', methods=['GET'])
 def uploaded_file(filename):
     return send_from_directory('uploads', filename)
-
 
 
 @main_routes.route('/test_db', methods=['GET'])

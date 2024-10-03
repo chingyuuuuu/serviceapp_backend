@@ -41,7 +41,8 @@ class User(db.Model):
 
 class Product(db.Model):
    __tablename__ = 'products'
-   user_id=db.Column(db.Integer,primary_key=True)
+   product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+   user_id=db.Column(db.Integer,nullable=False)
    name = db.Column(db.String(45),nullable=False)
    type = db.Column(db.String(45),nullable=False)
    price =db.Column(db.Float ,nullable=False)
