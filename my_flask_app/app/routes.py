@@ -34,12 +34,12 @@ def login():
     try:#在database當中查找account and password
         user = User.query.filter_by(account=account).first()
         if not user:
-            return jsonify({"message":"Invalid username or password"})
+            return jsonify({"message":"Invalid username or password"}),401
         if check_password_hash(user.password,password):
             # 從後端傳送user_id到前端
             return jsonify({"message":"Login successful","user_id":str(user.user_id)})
         else:
-            return jsonify({"message":"Invalid username or password"})
+            return jsonify({"message":"Invalid username or password"}),401
 
     except SQLAlchemyError as e:
         return jsonify({"message": "An error occurred", "error": str(e)}), 500
@@ -182,19 +182,22 @@ def save_product():
     from . import db
     import os
 
-    uploads_folder = 'uploads'
+    #獲得當前文件的目錄
+    uploads_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+    if not os.path.exists(uploads_folder):
+        os.makedirs(uploads_folder)
+
     #儲存圖片的url
     if 'image' not in request.files:
         image_path = None
     else:
         image_file = request.files['image']
-        if not os.path.exists(uploads_folder):
-            os.makedirs(uploads_folder)
-        image_path = os.path.join(uploads_folder, image_file.filename)
-        image_file.save(image_path)
-        #生成圖片url
+
+        #圖片儲存在絕對路徑，但是資料庫儲存的是相對路徑
+        image_path = os.path.join("uploads", image_file.filename)
+        absolute_image_path = os.path.join(uploads_folder, image_file.filename)
+        image_file.save(absolute_image_path)  # 保存文件到指定路径
         image_url = f"http://127.0.0.1:5000/{image_path.replace(os.sep, '/')}"
-        print(f"File saved to: {image_path}")
 
     data = request.form  # 请求数据
     user_id = int(data.get('user_id'))
@@ -218,9 +221,13 @@ def save_product():
         }), 200
     except Exception as e:
         db.session.rollback()  # 如果提交失败，回滚会话
-        print(f"Error occurred: {e}")  # 打印具體的錯誤信息
+        print(f"Error occurred: {e}")  # 印具體的錯誤信息
         return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
+@main_routes.route('/uploads/<filename>', methods=['GET'])
+def uploaded_file(filename):
+    uploads_folder="uploads";
+    return send_from_directory(uploads_folder, filename)
 
 @main_routes.route('/getProducts',methods=['GET'])
 def get_products():
@@ -351,9 +358,6 @@ def delete_prodcut(productId):
         return jsonify({"message":"An error occurred","error":str(e)}),500
 
 
-@main_routes.route('/uploads/<filename>', methods=['GET'])
-def uploaded_file(filename):
-    return send_from_directory('uploads', filename)
 
 
 @main_routes.route('/test_db', methods=['GET'])
