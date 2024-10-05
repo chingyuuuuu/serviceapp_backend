@@ -226,7 +226,7 @@ def save_product():
 
 @main_routes.route('/uploads/<filename>', methods=['GET'])
 def uploaded_file(filename):
-    uploads_folder="uploads";
+    uploads_folder="uploads"
     return send_from_directory(uploads_folder, filename)
 
 @main_routes.route('/getProducts',methods=['GET'])
@@ -255,6 +255,34 @@ def get_products():
                             })
 
             return jsonify(products_list), 200
+    except Exception as e:
+        print(f"Error occurred while fetching products: {e}")  # 打印具體的錯誤信息
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+
+@main_routes.route('/getprodctsinClient/',methods=['GET'])
+def proudcts_in_Client():
+    from .models import Product
+    try:
+        user_id = request.args.get('user_id')
+        if not user_id:
+            return jsonify({"message": "User ID missing"}), 400
+
+        # 將查詢結果轉換為json
+        products = Product.query.filter_by(user_id=user_id).all()
+        products_list = []
+        # 遍歷每個商品並加入倒product_list
+        for product in products:
+            image_url = f"http://127.0.0.1:5000/{product.image}" if '/uploads/' not in product.image else product.image
+            products_list.append({
+                'product_id': product.product_id,
+                'name': product.name,
+                'type': product.type,
+                'price': product.price,
+                'image': image_url,
+            })
+
+        return jsonify(products_list), 200
     except Exception as e:
         print(f"Error occurred while fetching products: {e}")  # 打印具體的錯誤信息
         return jsonify({"message": "An error occurred", "error": str(e)}), 500

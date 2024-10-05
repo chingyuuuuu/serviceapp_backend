@@ -4,19 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ab88597-ba95-491b-a4c1-7069e0e62463" name="Changes" comment="add loadproducts">
-      <change afterPath="$PROJECT_DIR$/my_flask_app/app/uploads/紅茶.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my_flask_app/app/uploads/綠茶.jpg" afterDir="false" />
+    <list default="true" id="0ab88597-ba95-491b-a4c1-7069e0e62463" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_flask_app/app/uploads/cb9e8aa6-07f5-43cb-9787-31e4f7d677f3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_flask_app/uploads/noodles.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_flask_app/uploads/rice.webp" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/uploads/rice.webp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../JKM\exportToHTML" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -33,7 +31,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="proportion" value="0.9" />
+    <option name="proportion" value="0.4445371" />
     <option name="showPreview" value="true" />
   </component>
   <component name="ProjectColorInfo">{
@@ -60,11 +58,14 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ching/Downloads/avec_moi_with_us_api-master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ching/PycharmProjects/JKM/my_flask_app/app&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app" />
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app" />
@@ -201,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727964793793</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add loadproducts">
+      <option name="closed" value="true" />
+      <created>1728042892333</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1728042892333</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
