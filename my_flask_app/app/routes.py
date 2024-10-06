@@ -5,6 +5,7 @@ from .models import User
 from sqlalchemy.sql import text
 from flask_mail import Message
 from werkzeug.security import generate_password_hash
+import os
 
 main_routes = Blueprint('main_routes', __name__)
 
@@ -180,17 +181,15 @@ def update_password():
 def save_product():
     from .models import Product
     from . import db
-    import os
 
     #獲得當前文件的目錄
     uploads_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
     if not os.path.exists(uploads_folder):
         os.makedirs(uploads_folder)
 
-    #儲存圖片的url
-    if 'image' not in request.files:
-        image_path = None
-    else:
+
+    image_url=None #預設為none
+    if 'image' in request.files:
         image_file = request.files['image']
 
         #圖片儲存在絕對路徑，但是資料庫儲存的是相對路徑
@@ -243,7 +242,10 @@ def get_products():
             products_list=[]
             #遍歷每個商品並加入倒product_list
             for product in products:
-                image_url = f"http://127.0.0.1:5000/{product.image}" if '/uploads/' not in product.image else product.image
+                if product.image:
+                    image_url = f"http://127.0.0.1:5000/{product.image}" if '/uploads/' not in product.image else product.image
+                else:
+                    image_url = None
                 products_list.append({
                                 'product_id':product.product_id,
                                 'name': product.name,
@@ -273,7 +275,10 @@ def proudcts_in_Client():
         products_list = []
         # 遍歷每個商品並加入倒product_list
         for product in products:
-            image_url = f"http://127.0.0.1:5000/{product.image}" if '/uploads/' not in product.image else product.image
+            if product.image:
+               image_url = f"http://127.0.0.1:5000/{product.image}" if '/uploads/' not in product.image else product.image
+            else:
+                image_url=None
             products_list.append({
                 'product_id': product.product_id,
                 'name': product.name,
