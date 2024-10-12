@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String,DateTime
 from .extensions import db
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
+from sqlalchemy.orm import relationship
 
 
 class User(db.Model):
@@ -49,3 +50,42 @@ class Product(db.Model):
    cost= db.Column(db.Float ,nullable=True)
    quantity=db.Column(db.Integer,nullable=True)
    image= db.Column(db.String(200))
+
+   order_products = relationship('OrderProduct', back_populates='product')
+
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+
+    order_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    table = db.Column(db.String(50), nullable=False)  # 桌号
+    total_amount = db.Column(db.Integer, nullable=False)  # 总金额
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))  # 创建时间
+    check = db.Column(db.Boolean, default=False)  # 用于检查订单状态（可选）
+
+    #加入與OrderProduct的關係
+    order_products = relationship('OrderProduct', back_populates='order')
+    def __init__(self, table, total_amount):  # 确保创建 Order 所有必要的属性都被正确地初始化
+        self.table = table
+        self.total_amount = total_amount
+
+    def __repr__(self):
+        return f'<Order {self.order_id}: Table {self.table}, Total {self.total_amount}>'
+
+class OrderProduct(db.Model):
+    __tablename__='orderproduct'
+    order_id=db.Column(db.Integer,db.ForeignKey('orders.order_id'),primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    #加入Order and Product的雙向關係
+    order = relationship('Order', back_populates='order_products')
+    product = relationship('Product', back_populates='order_products')
+
+    def __init__(self, order_id, product_id, quantity):
+        self.order_id = order_id
+        self.product_id = product_id
+        self.quantity = quantity
+
+
+    def __repr__(self):
+         return f'<OrderProduct Order ID {self.order_id}, Product ID {self.product_id}, Quantity {self.quantity}>'

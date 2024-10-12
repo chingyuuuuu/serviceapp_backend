@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ab88597-ba95-491b-a4c1-7069e0e62463" name="Changes" comment="add loadproducts">
+      <change afterPath="$PROJECT_DIR$/my_flask_app/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/auth_routes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/main_route.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/order_routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_flask_app/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_flask_app/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes/product_routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +75,7 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app" />
+      <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app\routes" />
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app" />
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\static" />
     </key>
@@ -218,7 +226,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728141914231</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="add loadproducts">
+      <option name="closed" value="true" />
+      <created>1728230974538</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1728230974538</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
