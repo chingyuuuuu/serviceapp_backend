@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ab88597-ba95-491b-a4c1-7069e0e62463" name="Changes" comment="add loadproducts">
-      <change afterPath="$PROJECT_DIR$/my_flask_app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/auth_routes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/main_route.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/order_routes.py" afterDir="false" />
+    <list default="true" id="0ab88597-ba95-491b-a4c1-7069e0e62463" name="Changes" comment="加入getorder">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_flask_app/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_flask_app/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes/product_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes/order_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes/order_routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728230974538</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="加入getorder">
+      <option name="closed" value="true" />
+      <created>1728726651965</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1728726651965</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -252,6 +254,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="hello" />
     <MESSAGE value="add loadproducts" />
-    <option name="LAST_COMMIT_MESSAGE" value="add loadproducts" />
+    <MESSAGE value="加入getorder" />
+    <option name="LAST_COMMIT_MESSAGE" value="加入getorder" />
   </component>
 </project>

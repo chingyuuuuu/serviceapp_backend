@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
-import traceback
 
 order_routes =Blueprint('order_routes',__name__)
 
@@ -12,18 +11,21 @@ def save_order():
     from ..import db
 
     data=request.get_json()
+
     if not all(key in data for key in ('table', 'products', 'total_amount')):
         return jsonify({"message": "Missing required fields"}), 400
 
     table_number=data['table']
     products = data['products']  # products 是一個包含 product_id 和 quantity 的列表
     total_amount=data['total_amount']
+    user_id = int(data['user_id'])
 
     try:
             #建立新的訂單
             new_order=Order(
                 table=table_number,
                 total_amount=total_amount,
+                user_id=user_id
             )
             db.session.add(new_order)
             db.session.commit()#先提交以生成新的order_id
@@ -47,6 +49,31 @@ def save_order():
         db.session.rollback()
         print(f"Error while saving order: {e}")
         return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+
+
+@order_routes.route('/getorder/<int:user_id>',methods=['GET'])
+def get_all_orders(user_id):
+    from ..models import Order
+    try:
+            orders=Order.query.filter_by(user_id=user_id).all()
+
+            order_data=[]
+            for order in orders:
+                order_data.append({
+                    "order_id":order.order_id,
+                    "table":order.table,
+                    "total_amount":order.total_amount,
+                    "created_at": order.created_at.strftime('%Y-%m-%dT%H:%M:%S'), # 格式化日期
+                    "check":order.check
+                })
+            return jsonify(order_data),200
+    except Exception as e:
+        print(f'Error{e}')
+        return jsonify({"error":str(e)}),500
+
+
+
 
 
 @order_routes.route('/getorderforclient/<string:tableNumber>',methods=['GET'])
@@ -100,3 +127,4 @@ def get_order_details(orderId):
          }),200
      except Exception as e:
           return jsonify({"error":str(e)}),500
+
