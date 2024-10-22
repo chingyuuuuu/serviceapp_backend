@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ab88597-ba95-491b-a4c1-7069e0e62463" name="Changes" comment="加入getorder">
+      <change afterPath="$PROJECT_DIR$/my_flask_app/app/routes/customer_routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_flask_app/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_flask_app/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes/order_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes/order_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_flask_app/app/routes/product_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_flask_app/app/routes/product_routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +35,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="proportion" value="0.4445371" />
+    <option name="proportion" value="0.8790659" />
     <option name="showPreview" value="true" />
   </component>
   <component name="ProjectColorInfo">{
@@ -68,8 +71,8 @@
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app" />
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app\routes" />
+      <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\app" />
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app" />
       <recent name="C:\Users\ching\PycharmProjects\JKM\my_flask_app\static" />
     </key>
@@ -236,7 +239,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728726651965</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="加入getorder">
+      <option name="closed" value="true" />
+      <created>1729357953002</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1729357953002</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

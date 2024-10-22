@@ -4,7 +4,7 @@ from .extensions import db
 from my_flask_app.app.routes.main_route import main_routes
 from .config import Config
 from flask_mail import Mail
-from .routes import auth_routes, product_routes,order_routes,main_route
+from .routes import auth_routes, product_routes,order_routes,main_route,customer_routes
 
 mail = Mail()
 
@@ -18,4 +18,5 @@ def create_app():    #配置flask
     app.register_blueprint(product_routes)
     app.register_blueprint(auth_routes)
     app.register_blueprint(order_routes)
+    app.register_blueprint(customer_routes)
     return app

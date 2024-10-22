@@ -89,3 +89,20 @@ class OrderProduct(db.Model):
 
     def __repr__(self):
          return f'<OrderProduct Order ID {self.order_id}, Product ID {self.product_id}, Quantity {self.quantity}>'
+
+class QA(db.Model):
+      __tablename__='qa'
+      QA_id=db.Column(db.Integer,primary_key=True)
+      type=db.Column(db.String(45),nullable=True)
+      question=db.Column(db.String(100),nullable=False)
+      answer=db.Column(db.String(100),nullable=False)
+      image=db.Column(db.String(100),nullable=True)
+      quser_id=db.Column(db.Integer,nullable=False)
+      def __init__(self,type,question,answer,image,quser_id):
+          self.type=type
+          self.question=question
+          self.answer=answer
+          self.image=image
+          self.quser_id=quser_id
+
+

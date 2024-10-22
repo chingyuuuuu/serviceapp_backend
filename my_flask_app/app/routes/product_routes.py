@@ -20,7 +20,7 @@ def save_product():
         image_file = request.files['image']
 
         #圖片儲存在絕對路徑，但是資料庫儲存的是相對路徑
-        image_path = os.path.join("../uploads", image_file.filename)
+        image_path = os.path.join("uploads", image_file.filename)
         absolute_image_path = os.path.join(uploads_folder, image_file.filename)
         image_file.save(absolute_image_path)  # 保存文件到指定路径
         image_url = f"http://127.0.0.1:5000/{image_path.replace(os.sep, '/')}"
