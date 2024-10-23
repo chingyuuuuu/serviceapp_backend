@@ -9,8 +9,10 @@ def save_product():
     from ..models import Product
     from ..import db
 
-    #獲得當前文件的目錄
-    uploads_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+    # 獲得當前文件的目錄
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # 絕對路徑-上一級目錄當中
+    uploads_folder = os.path.join(current_dir, '..', 'uploads')
     if not os.path.exists(uploads_folder):
         os.makedirs(uploads_folder)
 

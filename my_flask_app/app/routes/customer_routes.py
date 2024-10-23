@@ -11,7 +11,7 @@ def save_data():
 
      # 獲得當前文件的目錄
      current_dir = os.path.dirname(os.path.abspath(__file__))
-     #絕對路徑
+     #絕對路徑-上一級目錄當中
      uploads_folder = os.path.join(current_dir,'..', 'uploads')
 
      if not os.path.exists(uploads_folder):
@@ -30,8 +30,8 @@ def save_data():
      question = data.get('question')
      answer = data.get('answer')
      userId = data.get('user_id')
-     type=data.get('type',None)
-     print(image_url)
+     type=data.get('type',None)#如果有就儲存沒有就none
+
 
      if not question or not answer:
               return jsonify({"error":"question and answer are required"}),400
@@ -52,6 +52,7 @@ def save_data():
      except Exception as e:
               print(f"Error occured:{e}")
               return jsonify({"error":"An error occurred while saving"}),500
+
 
 @customer_routes.route('/getqa',methods=['GET'])#用userid去查找已經創建的qa
 def getqa():
@@ -87,10 +88,13 @@ def getqabyqaid(qaId):
         if not qa:
             return jsonify([]), 200
 
+        image_url = None
         if qa.image:
-            image_url = f"http://127.0.0.1:5000/{qa.image}" if '/uploads/' not in qa.image else qa.image
-        else:
-            image_url = None
+
+            if not qa.image.startswith('http://') and not qa.image.startswith('https://'):
+                image_url = f"http://127.0.0.1:5000/{qa.image}"
+            else:
+                image_url = qa.image
 
         result = [{
             'qaId': qa.QA_id,
