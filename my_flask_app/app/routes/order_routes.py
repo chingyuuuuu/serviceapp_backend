@@ -1,49 +1,48 @@
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 
-order_routes =Blueprint('order_routes',__name__)
+order_routes = Blueprint('order_routes', __name__)
 
 
-
-@order_routes.route('/saveorder',methods=['POST'])
+@order_routes.route('/saveorder', methods=['POST'])
 def save_order():
-    from ..models import Order,OrderProduct
+    from ..models import Order, OrderProduct
     from ..import db
 
-    data=request.get_json()
+    data = request.get_json()
 
     if not all(key in data for key in ('table', 'products', 'total_amount')):
         return jsonify({"message": "Missing required fields"}), 400
 
-    table_number=data['table']
+    table_number = data['table']
     products = data['products']  # products 是一個包含 product_id 和 quantity 的列表
-    total_amount=data['total_amount']
+    total_amount = data['total_amount']
     user_id = int(data['user_id'])
 
     try:
-            #建立新的訂單
-            new_order=Order(
-                table=table_number,
-                total_amount=total_amount,
-                user_id=user_id
+        # 建立新的訂單
+        new_order=Order(
+            table=table_number,
+            total_amount=total_amount,
+            user_id=user_id
+        )
+        db.session.add(new_order)
+        db.session.commit()  # 先提交以生成新的order_id
+
+        # 保存每個商品到OrderProduct
+        for product in products:
+            product_id=product['product_id']
+            quantity=product['quantity']
+
+            order_product=OrderProduct(
+                order_id=new_order.order_id,
+                product_id=product_id,
+                quantity=quantity,
             )
-            db.session.add(new_order)
-            db.session.commit()#先提交以生成新的order_id
 
-            #保存每個商品到OrderProduct
-            for product in products:
-                product_id=product['product_id']
-                quantity=product['quantity']
-
-                order_product=OrderProduct(
-                    order_id=new_order.order_id,
-                    product_id=product_id,
-                    quantity=quantity,
-                )
-
-                db.session.add(order_product)
-            db.session.commit()
-            return jsonify({"message":"Order saved successfully!","order_id":new_order.order_id}),200
+            db.session.add(order_product)
+        db.session.commit()
+        return jsonify({"message":"Order saved successfully!","order_id":new_order.order_id}),200
 
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -101,7 +100,7 @@ def get_order_for_client(tableNumber):
 #點擊訂單之後，查看商品資訊
 @order_routes.route('/getorderdetail/<int:orderId>',methods=['GET'])
 def get_order_details(orderId):
-     from ..models import Order,OrderProduct,Product
+     from ..models import OrderProduct,Product
      try:
          #根據order_id找到該訂單所有商品
          order_products=OrderProduct.query.filter_by(order_id=orderId).all()

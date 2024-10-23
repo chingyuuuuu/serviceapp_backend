@@ -1,8 +1,9 @@
-from flask import Blueprint, request, jsonify,send_from_directory
+from flask import Blueprint, request, jsonify, send_from_directory
 from sqlalchemy.exc import SQLAlchemyError
 import os
 
 product_routes = Blueprint('product_routes', __name__)
+
 
 @product_routes.route('/uploadproducts', methods=['POST'],endpoint='uploadproducts')
 def save_product():
@@ -15,7 +16,6 @@ def save_product():
     uploads_folder = os.path.join(current_dir, '..', 'uploads')
     if not os.path.exists(uploads_folder):
         os.makedirs(uploads_folder)
-
 
     image_url=None #預設為none
     if 'image' in request.files:

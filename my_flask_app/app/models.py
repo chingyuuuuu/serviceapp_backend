@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String,DateTime
+from sqlalchemy import Column, Integer, String, DateTime
 from .extensions import db
 from datetime import datetime, timezone
 from sqlalchemy.orm import relationship
@@ -17,11 +17,11 @@ class User(db.Model):
         self.account = account
         self.password = password
         self.reset_token = reset_token
-        self.reset_token_created_at = None  # 默认情况下，生成时间为空
+        self.reset_token_created_at = None  # 預設，時間是none
 
     def set_reset_token(self, token):
         self.reset_token = token
-        self.reset_token_created_at = datetime.utcnow() #當前時間
+        self.reset_token_created_at = datetime.utcnow()  # 當前時間
         db.session.commit()
 
     def clear_reset_token(self):
@@ -40,18 +40,19 @@ class User(db.Model):
         elapsed_time = (datetime.utcnow() - self.reset_token_created_at).total_seconds()
         return elapsed_time < expiration_seconds
 
-class Product(db.Model):
-   __tablename__ = 'products'
-   product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-   user_id=db.Column(db.Integer,nullable=False)
-   name = db.Column(db.String(45),nullable=False)
-   type = db.Column(db.String(45),nullable=False)
-   price =db.Column(db.Float ,nullable=False)
-   cost= db.Column(db.Float ,nullable=True)
-   quantity=db.Column(db.Integer,nullable=True)
-   image= db.Column(db.String(200))
 
-   order_products = relationship('OrderProduct', back_populates='product')
+class Product(db.Model):
+    __tablename__ = 'products'
+    product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(45), nullable=False)
+    type = db.Column(db.String(45), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    cost = db.Column(db.Float, nullable=True)
+    quantity = db.Column(db.Integer, nullable=True)
+    image = db.Column(db.String(200))
+
+    order_products = relationship('OrderProduct', back_populates='product')
 
 
 class Order(db.Model):
@@ -61,23 +62,26 @@ class Order(db.Model):
     total_amount = db.Column(db.Integer, nullable=False)  # 总金额
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))  # 创建时间
     check = db.Column(db.Boolean, default=False)  # 用于检查订单状态（可选）
-    user_id=db.Column(db.Integer,nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
 
-    #加入與OrderProduct的關係
+    # 加入與OrderProduct的關係
     order_products = relationship('OrderProduct', back_populates='order')
-    def __init__(self, table, total_amount,user_id):  # 确保创建 Order 所有必要的属性都被正确地初始化
+
+    def __init__(self, table, total_amount, user_id):  # 确保创建 Order 所有必要的属性都被正确地初始化
         self.table = table
         self.total_amount = total_amount
         self.user_id = user_id
+
     def __repr__(self):
         return f'<Order {self.order_id}: Table {self.table}, Total {self.total_amount}>'
 
+
 class OrderProduct(db.Model):
-    __tablename__='orderproduct'
-    order_id=db.Column(db.Integer,db.ForeignKey('orders.order_id'),primary_key=True)
+    __tablename__ = 'orderproduct'
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
-    #加入Order and Product的雙向關係
+    # 加入Order and Product的雙向關係
     order = relationship('Order', back_populates='order_products')
     product = relationship('Product', back_populates='order_products')
 
@@ -86,23 +90,22 @@ class OrderProduct(db.Model):
         self.product_id = product_id
         self.quantity = quantity
 
-
     def __repr__(self):
-         return f'<OrderProduct Order ID {self.order_id}, Product ID {self.product_id}, Quantity {self.quantity}>'
+        return f'<OrderProduct Order ID {self.order_id}, Product ID {self.product_id}, Quantity {self.quantity}>'
+
 
 class QA(db.Model):
-      __tablename__='qa'
-      QA_id=db.Column(db.Integer,primary_key=True)
-      type=db.Column(db.String(45),nullable=True)
-      question=db.Column(db.String(100),nullable=False)
-      answer=db.Column(db.String(100),nullable=False)
-      image=db.Column(db.String(100),nullable=True)
-      quser_id=db.Column(db.Integer,nullable=False)
-      def __init__(self,type,question,answer,image,quser_id):
-          self.type=type
-          self.question=question
-          self.answer=answer
-          self.image=image
-          self.quser_id=quser_id
-
+   __tablename__ = 'qa'
+   QA_id=db.Column(db.Integer,primary_key=True)
+   type=db.Column(db.String(45),nullable=True)
+   question=db.Column(db.String(100),nullable=False)
+   answer=db.Column(db.String(100),nullable=False)
+   image=db.Column(db.String(100),nullable=True)
+   quser_id=db.Column(db.Integer,nullable=False)
+   def __init__(self,type,question,answer,image,quser_id):
+       self.type=type
+       self.question=question
+       self.answer=answer
+       self.image=image
+       self.quser_id=quser_id
 

@@ -1,11 +1,12 @@
-import string ,random
+import string
+import random
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from my_flask_app.app.models import User
 from flask_mail import Message
 from werkzeug.security import generate_password_hash
 
-auth_routes = Blueprint('auth_routes',__name__)
+auth_routes = Blueprint('auth_routes', __name__)
 
 
 @auth_routes.route('/login', methods=['POST'])
@@ -13,18 +14,17 @@ def login():
     from ..models import User  # 延遲導入
     from werkzeug.security import check_password_hash
 
-    data = request.get_json() #客戶端發送數據，用來解析json格式的數據
+    data = request.get_json()  # 客戶端發送數據，用來解析json格式的數據
     account = data.get('account')
     password = data.get('password')
-
 
     if not account or not password:
         return jsonify({"message": "Account and password are required"}), 400
 
-    try:#在database當中查找account and password
+    try:  # 在database當中查找account and password
         user = User.query.filter_by(account=account).first()
         if not user:
-            return jsonify({"message":"Invalid username or password"}),401
+            return jsonify({"message" : "Invalid username or password"}),401
         if check_password_hash(user.password,password):
             # 從後端傳送user_id到前端
             return jsonify({"message":"Login successful","user_id":str(user.user_id)})

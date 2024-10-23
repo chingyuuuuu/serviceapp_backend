@@ -1,4 +1,3 @@
-import os
 
 class Config:
     # 数据库配置

@@ -10,10 +10,10 @@ main_routes = Blueprint('main_routes', __name__)
 def get_data():
     return jsonify({'message': 'Hello from Flask!'})
 
+
 @main_routes.route('/')
 def home():
     return 'Welcome to the home page!'
-
 
 
 @main_routes.route('/test_db', methods=['GET'])
@@ -21,7 +21,7 @@ def test_db():
     from .. import db
     try:
         db.session.execute(text('SELECT 1'))
-        return  'Database connection is successful!', 200
+        return 'Database connection is successful!', 200
     except OperationalError:
         return 'Database connection failed!', 500
 
